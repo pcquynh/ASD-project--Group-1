@@ -1,7 +1,7 @@
 import React from "react";
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
-import { Home, Game, Results } from "./pages";
+import { Home, Game, Results, Statistics } from "./pages";
 function App() {
   return (
     <div>
@@ -9,7 +9,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/game" element={<Game />} />
         <Route path="/results" element={<Results />} />
-        <Route path="/statistics" element={<Results />} />
+        <Route path="/statistics" element={<Statistics />} />
       </Routes>
     </div>
   );
