@@ -1,23 +1,31 @@
 import React from "react";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import {Container, Row, Col} from 'react-bootstrap';
 
-export function Home() {
+export function Home(){
   return (
-    <>
-      <h1>Welcome to Speedtriv!</h1>
-      <ul>
-        <li>
-          Speedtriv is a daily trivia game, with an emphasis on speed and
-          trivia!
-        </li>
-        <li>You get 6 questions, with 3 answers to choose from.</li>
-        <li>Each question runs on a 15 second timer.</li>
-        <li>
-          Your total score and time taken will be displayed after each game.
-        </li>
-        <li>Gook luck and have fun!</li>
-      </ul>
-      <button>Start</button>
-    </>
+      <Container>
+          <Row className='text-center'>
+              <Col><h1>Welcome to Speedtriv!</h1>
+              <br></br>
+              </Col>
+          </Row>
+          <Row className="justify-content-center">
+              <Col className="col-7 border border-dark">
+              <h5>
+              <p>Speedtriv is a daily trivia game, with an emphasis on speed and trivia!</p>
+              <p>You get 6 questions, with 3 answers to choose from.</p>
+              <p>Each question runs on a 15 second timer.</p>
+              <p>Your total score and time taken will be displayed after each game.</p>
+              <p>Good luck and have fun!</p>
+              </h5>
+              </Col>
+          </Row>
+          <br></br>
+          <Row className="justify-content-center">
+              <a href="#" class="col-7 btn btn-dark btn-lg active" role="button" aria-pressed="true">Start</a>
+          </Row>
+      </Container>
   );
 }
 
