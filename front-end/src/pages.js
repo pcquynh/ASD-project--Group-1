@@ -2,8 +2,10 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Row, Col } from "react-bootstrap";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 export function Home() {
+  const navigate = useNavigate();
   return (
     <Container>
       <Row className="text-center">
@@ -35,7 +37,7 @@ export function Home() {
           class="col-7 btn btn-dark btn-lg active"
           role="button"
           aria-pressed="true"
-          onClick={() => (window.location.href = "/game")}
+          onClick={() => navigate("/game")}
         >
           Start
         </a>
