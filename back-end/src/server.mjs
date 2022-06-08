@@ -1,6 +1,5 @@
 import express from "express";
-import fs from "fs";
-import { MongoClient, ObjectId } from "mongodb";
+import { MongoClient } from "mongodb";
 import path from "path";
 import { fileURLToPath } from "url";
 
