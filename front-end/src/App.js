@@ -1,7 +1,11 @@
 import React from "react";
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
-import { Home, Game, Results, Statistics } from "./pages";
+import Home from "./pages/Home";
+import Game from "./pages/Game";
+import Results from "./pages/Results";
+import Statistics from "./pages/Statistics";
+
 function App() {
   return (
     <div>
