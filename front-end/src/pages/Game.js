@@ -11,7 +11,7 @@ function Game() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [over, setOver] = useState(false);
   const navigate = useNavigate();
-  const [seconds, setSeconds] = useState(15);
+  const [secondsOnQuestion, setSecondsOnQuestion] = useState(15);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,19 +24,20 @@ function Game() {
 
   const tick = () => {
     if (over) return;
-    if (seconds === 0) setOver(true);
+    if (secondsOnQuestion === 0) setOver(true);
     else {
-      setSeconds(seconds - 1);
+      setSecondsOnQuestion(secondsOnQuestion - 1);
     }
   };
 
   const reset = () => {
-    setSeconds(parseInt(15));
+    setSecondsOnQuestion(parseInt(15));
     setOver(false);
   };
+
   useEffect(() => {
-    const timerID = setInterval(() => tick(), 1000);
-    return () => clearInterval(timerID);
+    const questionTimer = setInterval(() => tick(), 1000);
+    return () => clearInterval(questionTimer);
   });
 
   const showNextQuestion = () => {
@@ -85,7 +86,7 @@ function Game() {
       <Container>
         <Row className="text-center" onChange={showNextQuestion}>
           <Col>
-            <p class="fw-bold display-2">{`0:${seconds
+            <p class="fw-bold display-2">{`0:${secondsOnQuestion
               .toString()
               .padStart(2, "0")}`}</p>
           </Col>
@@ -99,6 +100,14 @@ function Game() {
           </Col>
         </Row>
         <Question question={questions[currentQuestion]} checkAnswer={checkAnswer} score={score} />
+        <Row className="justify-content-center">
+          <Col className="col-4">
+            <h5>Your Score: {score}</h5>
+          </Col>
+          <Col className="col-3 text-end">
+            <h5>Total time taken: 0:00s</h5>
+          </Col>
+        </Row>
       </Container>
     );
   }

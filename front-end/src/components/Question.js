@@ -2,7 +2,7 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Row, Col } from "react-bootstrap";
 
-function Question({ question, checkAnswer = f => f, score}) {
+function Question({ question, checkAnswer = f => f}) {
     return (
       <>
         <Row className="justify-content-center">
@@ -48,15 +48,8 @@ function Question({ question, checkAnswer = f => f, score}) {
           </a>
         </Row>
         <br></br>
-        <Row className="justify-content-center">
-          <Col className="col-4">
-            <h5>Your Score: {score}</h5>
-          </Col>
-          <Col className="col-3 text-end">
-            <h5>Total time taken: 0:00s</h5>
-          </Col>
-        </Row>
       </>
-    )
+    );
 }
+
 export default Question;
