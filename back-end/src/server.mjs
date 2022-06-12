@@ -40,7 +40,7 @@ app.get('/api/question', async (req, res) => {
     try{
         await client.connect();
         const db = client.db("triviaDatabase");
-        const questionInfo = await db.collection('trivia').find({}).toArray();
+        const questionInfo = await db.collection('trivia').find({}).project({"correctAnswer":0,"_id":0}).toArray();
         res.status(200).json(questionInfo);
         client.close();
     }catch(error){
