@@ -29,7 +29,10 @@ function Question({ questions }) {
     return () => clearInterval(timerID);
   });
 
+
+
   const showNextQuestion = () => {
+    
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
       reset();
@@ -37,6 +40,35 @@ function Question({ questions }) {
       navigate("/results");
     }
   };
+
+  const checkAnswer = (answer) => {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+      "question": questions[currentQuestion].question,
+      "choice": answer
+    });
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow'
+    };
+
+    fetch("http://localhost:8000/api/checkanswer", requestOptions)
+      .then(response => response.text())
+      .then(result => {
+        if(result=="correct"){
+          setScore(score + 1)
+        }
+      })
+      .catch(error => console.log('error', error));
+
+    showNextQuestion();
+  }
+
 
   if (over) {
     showNextQuestion();
@@ -72,7 +104,7 @@ function Question({ questions }) {
             class="col-7 btn btn-dark btn-lg active"
             role="button"
             aria-pressed="true"
-            onClick={showNextQuestion}
+            onClick={() => checkAnswer("A")}
           >
             A. {questions[currentQuestion].choiceA}
           </a>
@@ -84,7 +116,7 @@ function Question({ questions }) {
             class="col-7 btn btn-dark btn-lg active"
             role="button"
             aria-pressed="true"
-            onClick={showNextQuestion}
+            onClick={() => checkAnswer("B")}
           >
             B. {questions[currentQuestion].choiceB}
           </a>
@@ -96,7 +128,7 @@ function Question({ questions }) {
             class="col-7 btn btn-dark btn-lg active"
             role="button"
             aria-pressed="true"
-            onClick={showNextQuestion}
+            onClick={() => checkAnswer("C")}
           >
             C. {questions[currentQuestion].choiceC}
           </a>
@@ -104,7 +136,7 @@ function Question({ questions }) {
         <br></br>
         <Row className="justify-content-center">
           <Col className="col-4">
-            <h5>Your Score: 0</h5>
+            <h5>Your Score: {score}</h5>
           </Col>
           <Col className="col-3 text-end">
             <h5>Total time taken: 0:00s</h5>
