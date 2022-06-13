@@ -68,7 +68,7 @@ function Game() {
     await fetch("http://localhost:8000/api/checkanswer", requestOptions)
       .then(response => response.text())
       .then(result => {
-        if(result=="correct"){
+        if(result==="correct"){
           setScore(score + 1);
         }
       })
@@ -81,7 +81,7 @@ function Game() {
     showNextQuestion();
   }
 
-  if (questions.length > 6){
+  if (questions.length >= 6){
     return (
       <Container>
         <Row className="text-center" onChange={showNextQuestion}>
