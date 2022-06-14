@@ -12,12 +12,16 @@ function Game() {
   const [over, setOver] = useState(false);
   const navigate = useNavigate();
   const [secondsOnQuestion, setSecondsOnQuestion] = useState(15);
+  const [loading, setLoading] = useState(false);
+  let currentDate = new Date().toISOString().slice(0, 10);
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       const result = await fetch("/api/question");
       const body = await result.json();
       setQuestions(body);
+      setLoading(false);
     };
     fetchData();
   }, []);
@@ -54,25 +58,25 @@ function Game() {
     myHeaders.append("Content-Type", "application/json");
 
     var raw = JSON.stringify({
-      "question": questions[currentQuestion].question,
-      "choice": answer
+      question: questions[currentQuestion].question,
+      choice: answer,
     });
 
     var requestOptions = {
-      method: 'POST',
+      method: "POST",
       headers: myHeaders,
       body: raw,
-      redirect: 'follow'
+      redirect: "follow",
     };
 
     await fetch("http://localhost:8000/api/checkanswer", requestOptions)
-      .then(response => response.text())
-      .then(result => {
-        if(result==="correct"){
+      .then((response) => response.text())
+      .then((result) => {
+        if (result === "correct") {
           setScore(score + 1);
         }
       })
-      .catch(error => console.log('error', error));
+      .catch((error) => console.log("error", error));
 
     showNextQuestion();
   }
@@ -81,7 +85,38 @@ function Game() {
     showNextQuestion();
   }
 
-  if (questions.length >= 6){
+  const updateCurrentDateQuestion = async (id) => {
+    const requestOptions = {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ usedDate: currentDate }),
+    };
+    const response = await fetch(
+      `http://localhost:8000/api/update/${id}`,
+      requestOptions
+    );
+    const data = await response.json();
+    console.log(data);
+  };
+
+  let currentDateQuestions = [];
+  if (loading === false && questions.length > 0) {
+    currentDateQuestions = questions
+      .filter((q) => q.usedDate === currentDate)
+      .slice(0, 6);
+    if (currentDateQuestions.length === 0) {
+      currentDateQuestions = questions.slice(0, 6);
+      console.log(currentDateQuestions);
+      currentDateQuestions.forEach((q) => {
+        console.log(q._id);
+        updateCurrentDateQuestion(q._id);
+      });
+    }
+  }
+
+  if (currentDateQuestions.length > 0) {
     return (
       <Container>
         <Row className="text-center" onChange={showNextQuestion}>
@@ -94,12 +129,16 @@ function Game() {
         <Row className="text-center font-weight-bold">
           <Col>
             <h1>
-              Question {currentQuestion + 1}/{questions.length}
+              Question {currentQuestion + 1}/{currentDateQuestions.length}
             </h1>
             <br></br>
           </Col>
         </Row>
-        <Question question={questions[currentQuestion]} checkAnswer={checkAnswer} score={score} />
+        <Question
+          question={currentDateQuestions[currentQuestion]}
+          checkAnswer={checkAnswer}
+          score={score}
+        />
         <Row className="justify-content-center">
           <Col className="col-4">
             <h5>Your Score: {score}</h5>
