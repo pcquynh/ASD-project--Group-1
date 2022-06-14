@@ -1,13 +1,15 @@
 import express from "express";
-import { MongoClient } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 import path from "path";
 import { fileURLToPath } from "url";
+import cors from "cors";
 
 const app = express();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 app.use(express.static(path.join(__dirname, "/build")));
+app.use(cors());
 app.use(express.json());
 
 const client = new MongoClient("mongodb://localhost:27017");
@@ -104,17 +106,18 @@ app.post("/api/add", async (req, res) => {
 // Test in postman, have cors error in application
 app.put("/api/update/:id", async (req, res) => {
   const { usedDate } = req.body;
+  console.log(usedDate);
   try {
     await client.connect();
     const db = client.db("triviaDatabase");
     const updatedQuestion = await db
       .collection("trivia")
-      .updateOne(
+      .update(
         { _id: ObjectId(req.params.id) },
         { $set: { usedDate: usedDate } }
       );
     res.status(200).json(updatedQuestion);
-    client.close();
+    // client.close();
   } catch (error) {
     res.sendStatus(500);
   }

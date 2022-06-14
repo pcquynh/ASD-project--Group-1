@@ -14,6 +14,7 @@ function Game() {
   const [secondsOnQuestion, setSecondsOnQuestion] = useState(15);
   const [loading, setLoading] = useState(false);
   let currentDate = new Date().toISOString().slice(0, 10);
+  const [showResults, setShowResults] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,19 +38,20 @@ function Game() {
   const reset = () => {
     setSecondsOnQuestion(parseInt(15));
     setOver(false);
+    setShowResults(false);
   };
 
-  useEffect(() => {
-    const questionTimer = setInterval(() => tick(), 1000);
-    return () => clearInterval(questionTimer);
-  });
+  // useEffect(() => {
+  //   const questionTimer = setInterval(() => tick(), 1000);
+  //   return () => clearInterval(questionTimer);
+  // });
 
   const showNextQuestion = () => {
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
       reset();
     } else {
-      navigate("/results");
+      setShowResults(true);
     }
   };
 
@@ -126,27 +128,33 @@ function Game() {
               .padStart(2, "0")}`}</p>
           </Col>
         </Row>
-        <Row className="text-center font-weight-bold">
-          <Col>
-            <h1>
-              Question {currentQuestion + 1}/{currentDateQuestions.length}
-            </h1>
-            <br></br>
-          </Col>
-        </Row>
+        {/* todo: update total time and waiting time for next round */}
+        {showResults ? (
+          <Row className="justify-content-center">
+            <Col className="col-4">
+              <h1>Game over!</h1>
+              <h5>Your Score: {score}</h5>
+            </Col>
+            <Col className="col-3 text-end">
+              <h5>Total time taken: 0:00s</h5>
+              <h5>Next SpeedTriv</h5>
+            </Col>
+          </Row>
+        ) : (
+          <Row className="text-center font-weight-bold">
+            <Col>
+              <h1>
+                Question {currentQuestion + 1}/{currentDateQuestions.length}
+              </h1>
+              <br></br>
+            </Col>
+          </Row>
+        )}
         <Question
           question={currentDateQuestions[currentQuestion]}
           checkAnswer={checkAnswer}
           score={score}
         />
-        <Row className="justify-content-center">
-          <Col className="col-4">
-            <h5>Your Score: {score}</h5>
-          </Col>
-          <Col className="col-3 text-end">
-            <h5>Total time taken: 0:00s</h5>
-          </Col>
-        </Row>
       </Container>
     );
   }
