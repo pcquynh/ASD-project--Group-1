@@ -2,15 +2,14 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useState, useEffect } from "react";
 import Question from "../components/Question";
-import { useNavigate } from "react-router-dom";
 import { Container, Row, Col } from "react-bootstrap";
+import Results from "../components/Results";
 
 function Game() {
   const [questions, setQuestions] = useState([]);
   const [score, setScore] = useState(0);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [over, setOver] = useState(false);
-  const navigate = useNavigate();
   const [secondsOnQuestion, setSecondsOnQuestion] = useState(15);
   const [loading, setLoading] = useState(false);
   let currentDate = new Date().toISOString().slice(0, 10);
@@ -41,10 +40,10 @@ function Game() {
     setShowResults(false);
   };
 
-  // useEffect(() => {
-  //   const questionTimer = setInterval(() => tick(), 1000);
-  //   return () => clearInterval(questionTimer);
-  // });
+  useEffect(() => {
+    const questionTimer = setInterval(() => tick(), 1000);
+    return () => clearInterval(questionTimer);
+  });
 
   const showNextQuestion = () => {
     if (currentQuestion < questions.length - 1) {
@@ -121,40 +120,32 @@ function Game() {
   if (currentDateQuestions.length > 0) {
     return (
       <Container>
-        <Row className="text-center" onChange={showNextQuestion}>
-          <Col>
-            <p class="fw-bold display-2">{`0:${secondsOnQuestion
-              .toString()
-              .padStart(2, "0")}`}</p>
-          </Col>
-        </Row>
         {/* todo: update total time and waiting time for next round */}
         {showResults ? (
-          <Row className="justify-content-center">
-            <Col className="col-4">
-              <h1>Game over!</h1>
-              <h5>Your Score: {score}</h5>
-            </Col>
-            <Col className="col-3 text-end">
-              <h5>Total time taken: 0:00s</h5>
-              <h5>Next SpeedTriv</h5>
-            </Col>
-          </Row>
+          <Results score={score} />
         ) : (
-          <Row className="text-center font-weight-bold">
-            <Col>
-              <h1>
-                Question {currentQuestion + 1}/{currentDateQuestions.length}
-              </h1>
-              <br></br>
-            </Col>
-          </Row>
+          <>
+            <Row className="text-center" onChange={showNextQuestion}>
+              <Col>
+                <p class="fw-bold display-2">{`0:${secondsOnQuestion
+                  .toString()
+                  .padStart(2, "0")}`}</p>
+              </Col>
+            </Row>
+            <Row className="text-center font-weight-bold">
+              <Col>
+                <h1>
+                  Question {currentQuestion + 1}/{currentDateQuestions.length}
+                </h1>
+                <br></br>
+              </Col>
+            </Row>
+            <Question
+              question={currentDateQuestions[currentQuestion]}
+              checkAnswer={checkAnswer}
+              score={score}/>
+          </>
         )}
-        <Question
-          question={currentDateQuestions[currentQuestion]}
-          checkAnswer={checkAnswer}
-          score={score}
-        />
       </Container>
     );
   }
