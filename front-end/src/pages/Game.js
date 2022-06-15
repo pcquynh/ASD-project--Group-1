@@ -108,7 +108,9 @@ function Game() {
       .filter((q) => q.usedDate === currentDate)
       .slice(0, 6);
     if (currentDateQuestions.length === 0) {
-      currentDateQuestions = questions.slice(0, 6);
+      currentDateQuestions = questions
+        .filter((q) => q.usedDate === null)
+        .slice(0, 6);
       console.log(currentDateQuestions);
       currentDateQuestions.forEach((q) => {
         console.log(q._id);
@@ -143,7 +145,8 @@ function Game() {
             <Question
               question={currentDateQuestions[currentQuestion]}
               checkAnswer={checkAnswer}
-              score={score}/>
+              score={score}
+            />
           </>
         )}
       </Container>
