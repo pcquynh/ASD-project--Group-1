@@ -2,7 +2,7 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Row, Col } from "react-bootstrap";
 
-function Question({ question, checkAnswer = (f) => f, setTimerActive = f => f }) {
+function Question({ question, checkAnswer = (f) => f, setTimerActive = f => f, buttonColorA, buttonColorB, buttonColorC }) {
   return (
     <>
       <Row className="justify-content-center">
@@ -15,7 +15,7 @@ function Question({ question, checkAnswer = (f) => f, setTimerActive = f => f })
       <Row className="justify-content-center">
         <a
           href="#"
-          class="col-7 btn btn-dark btn-lg active"
+          className={buttonColorA}
           role="button"
           aria-pressed="true"
           onClick={
@@ -32,7 +32,7 @@ function Question({ question, checkAnswer = (f) => f, setTimerActive = f => f })
       <Row className="justify-content-center">
         <a
           href="#"
-          class="col-7 btn btn-dark btn-lg active"
+          className={buttonColorB}
           role="button"
           aria-pressed="true"
           onClick={
@@ -49,7 +49,7 @@ function Question({ question, checkAnswer = (f) => f, setTimerActive = f => f })
       <Row className="justify-content-center">
         <a
           href="#"
-          class="col-7 btn btn-dark btn-lg active"
+          className={buttonColorC}
           role="button"
           aria-pressed="true"
           onClick={() => {

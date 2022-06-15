@@ -16,6 +16,14 @@ function Game() {
   let currentDate = new Date().toISOString().slice(0, 10);
   const [showResults, setShowResults] = useState(false);
   const [timerActive, setTimerActive] = useState(true);
+  const [buttonColorA, setButtonColorA] = useState("col-7 btn btn-dark btn-lg active");
+  const [buttonColorB, setButtonColorB] = useState("col-7 btn btn-dark btn-lg active");
+  const [buttonColorC, setButtonColorC] = useState("col-7 btn btn-dark btn-lg active");
+
+  //button styles - default, correct, incorrect
+  const default_button = "col-7 btn btn-dark btn-lg active";
+  const green_button = "col-7 btn btn-success btn-lg active";
+  const red_button = "col-7 btn btn-danger btn-lg active";
 
   useEffect(() => {
     const fetchData = async () => {
@@ -78,12 +86,25 @@ function Game() {
       .then((result) => {
         if (result === "correct") {
           setScore(score + 1);
-          setTimeout(1500);
+          if (answer === "A") setButtonColorA(green_button);
+          if (answer === "B") setButtonColorB(green_button);
+          if (answer === "C") setButtonColorC(green_button);
+          
+        } else {
+          if (answer === "A") setButtonColorA(red_button);
+          if (answer === "B") setButtonColorB(red_button);
+          if (answer === "C") setButtonColorC(red_button);
         }
       })
       .catch((error) => console.log("error", error));
 
-    showNextQuestion();
+    
+    setTimeout(() => {
+      setButtonColorA(default_button);
+      setButtonColorB(default_button);
+      setButtonColorC(default_button);
+      showNextQuestion();
+    }, 1500);
   }
 
   const updateCurrentDateQuestion = async (id) => {
@@ -148,6 +169,9 @@ function Game() {
               checkAnswer={checkAnswer}
               score={score}
               setTimerActive={setTimerActive}
+              buttonColorA={buttonColorA}
+              buttonColorB={buttonColorB}
+              buttonColorC={buttonColorC}
               />
           </>
         )}
