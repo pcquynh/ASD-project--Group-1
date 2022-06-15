@@ -79,6 +79,7 @@ function Game() {
         if (result === "correct") {
           setScore(score + 1);
         }
+        setTimeout(1500);
       })
       .catch((error) => console.log("error", error));
 
@@ -143,7 +144,9 @@ function Game() {
             <Question
               question={currentDateQuestions[currentQuestion]}
               checkAnswer={checkAnswer}
-              score={score}/>
+              score={score}
+              setTimerActive={setTimerActive}
+              />
           </>
         )}
       </Container>
