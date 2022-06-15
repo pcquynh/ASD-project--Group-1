@@ -2,7 +2,7 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Row, Col } from "react-bootstrap";
 
-function Question({ question, checkAnswer = (f) => f, setTimerActive = f => f, buttonColorA, buttonColorB, buttonColorC }) {
+function Question({ question, checkAnswer = (f) => f, setTimerActive = (f) => f, buttonColorA, buttonColorB, buttonColorC }) {
   return (
     <>
       <Row className="justify-content-center">
