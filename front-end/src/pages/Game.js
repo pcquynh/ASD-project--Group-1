@@ -7,7 +7,6 @@ import Results from "../components/Results";
 
 function Game() {
   const [startTime] = useState(Date.now());
-  console.log(startTime);
   const [questions, setQuestions] = useState([]);
   const [score, setScore] = useState(0);
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -50,7 +49,7 @@ function Game() {
       clearInterval(questionTimer);
     }
     if (timerActive && secondsOnQuestion === 0){
-      showNextQuestion();
+      checkAnswer("Timeout");
     }
     return () => clearInterval(questionTimer);
   }, [timerActive, secondsOnQuestion]);
@@ -84,16 +83,18 @@ function Game() {
     await fetch("http://localhost:8000/api/checkanswer", requestOptions)
       .then((response) => response.text())
       .then((result) => {
-        if (result === "correct") {
+        if (result === answer) {
           setScore(score + 1);
           if (answer === "A") setButtonColorA(green_button);
           if (answer === "B") setButtonColorB(green_button);
           if (answer === "C") setButtonColorC(green_button);
-          
         } else {
           if (answer === "A") setButtonColorA(red_button);
           if (answer === "B") setButtonColorB(red_button);
           if (answer === "C") setButtonColorC(red_button);
+          if (result === "A") setButtonColorA(green_button);
+          if (result === "B") setButtonColorB(green_button);
+          if (result === "C") setButtonColorC(green_button);
         }
       })
       .catch((error) => console.log("error", error));

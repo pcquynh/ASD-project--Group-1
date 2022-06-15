@@ -56,7 +56,6 @@ app.get("/api/question", async (req, res) => {
 //Check answer and send back correct/incorrect.
 //Working in postman, test in program!
 app.post("/api/checkanswer", async (req, res) => {
-  const choice = req.body.choice;
   const question = req.body.question;
 
   try {
@@ -65,11 +64,7 @@ app.post("/api/checkanswer", async (req, res) => {
     const questionInfo = await db
       .collection("trivia")
       .findOne({ question: question });
-    if (questionInfo.correctAnswer === choice) {
-      res.status(200).send("correct");
-    } else {
-      res.status(200).send("incorrect");
-    }
+    res.status(200).send(questionInfo.correctAnswer);
     client.close();
   } catch (error) {
     res.sendStatus(500);
