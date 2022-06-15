@@ -2,7 +2,7 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Row, Col } from "react-bootstrap";
 
-function Question({ question, checkAnswer = (f) => f }) {
+function Question({ question, checkAnswer = (f) => f, setTimerActive = f => f }) {
   return (
     <>
       <Row className="justify-content-center">
@@ -18,7 +18,12 @@ function Question({ question, checkAnswer = (f) => f }) {
           class="col-7 btn btn-dark btn-lg active"
           role="button"
           aria-pressed="true"
-          onClick={() => checkAnswer("A")}
+          onClick={
+            () => {
+              setTimerActive(false);
+              checkAnswer("A");
+            }
+            }
         >
           A. {question.choiceA}
         </a>
@@ -30,7 +35,12 @@ function Question({ question, checkAnswer = (f) => f }) {
           class="col-7 btn btn-dark btn-lg active"
           role="button"
           aria-pressed="true"
-          onClick={() => checkAnswer("B")}
+          onClick={
+            () => {
+              setTimerActive(false);
+              checkAnswer("B");
+            }
+          }
         >
           B. {question.choiceB}
         </a>
@@ -42,7 +52,10 @@ function Question({ question, checkAnswer = (f) => f }) {
           class="col-7 btn btn-dark btn-lg active"
           role="button"
           aria-pressed="true"
-          onClick={() => checkAnswer("C")}
+          onClick={() => {
+            setTimerActive(false);
+            checkAnswer("C");
+          }}
         >
           C. {question.choiceC}
         </a>
