@@ -6,14 +6,16 @@ import { Container, Row, Col } from "react-bootstrap";
 import Results from "../components/Results";
 
 function Game() {
+  const [startTime] = useState(Date.now());
+  console.log(startTime);
   const [questions, setQuestions] = useState([]);
   const [score, setScore] = useState(0);
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [over, setOver] = useState(false);
   const [secondsOnQuestion, setSecondsOnQuestion] = useState(15);
   const [loading, setLoading] = useState(false);
   let currentDate = new Date().toISOString().slice(0, 10);
   const [showResults, setShowResults] = useState(false);
+  const [timerActive, setTimerActive] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -26,30 +28,31 @@ function Game() {
     fetchData();
   }, []);
 
-  const tick = () => {
-    if (over) return;
-    if (secondsOnQuestion === 0) setOver(true);
-    else {
-      setSecondsOnQuestion(secondsOnQuestion - 1);
-    }
-  };
-
   const reset = () => {
     setSecondsOnQuestion(parseInt(15));
-    setOver(false);
+    setTimerActive(true);
     setShowResults(false);
   };
 
   useEffect(() => {
-    const questionTimer = setInterval(() => tick(), 1000);
+    let questionTimer = null;
+    if (timerActive){
+      questionTimer = setInterval(() => setSecondsOnQuestion(secondsOnQuestion - 1), 1000);
+    }else if (!timerActive && secondsOnQuestion !== 0){
+      clearInterval(questionTimer);
+    }
+    if (timerActive && secondsOnQuestion === 0){
+      showNextQuestion();
+    }
     return () => clearInterval(questionTimer);
-  });
+  }, [timerActive, secondsOnQuestion]);
 
   const showNextQuestion = () => {
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
       reset();
     } else {
+      setTimerActive(false);
       setShowResults(true);
     }
   };
@@ -79,10 +82,6 @@ function Game() {
       })
       .catch((error) => console.log("error", error));
 
-    showNextQuestion();
-  }
-
-  if (over) {
     showNextQuestion();
   }
 
@@ -123,8 +122,9 @@ function Game() {
     return (
       <Container>
         {/* todo: update total time and waiting time for next round */}
-        {showResults ? (
-          <Results score={score} />
+        {showResults ? 
+        (
+          <Results score={score} time={startTime} />
         ) : (
           <>
             <Row className="text-center" onChange={showNextQuestion}>
