@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Question from "../components/Question";
 import { Container, Row, Col } from "react-bootstrap";
 // import Popup from 'reactjs-popup';
-import 'reactjs-popup/dist/index.css';
+// import 'reactjs-popup/dist/index.css';
 import Results from "../components/Results";
 
 function Game() {
