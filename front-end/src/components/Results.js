@@ -1,6 +1,6 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Row, Col } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
 
 function Results({ score, time }) {
   // TODO: Incorporate time into scoring system
@@ -13,17 +13,19 @@ function Results({ score, time }) {
   let totalTime = (Date.now() - time)/1000;
   return (
     <>
+    <Container>
       <Row className="justify-content-center">
-        <Col className="col-4">
+        <Col className="col-7 border border-dark text-center">
           <h1>Game over!</h1>
-          <h5>{score}/6</h5>
-          <h5>Your Score: x Points</h5>
-        </Col>
-        <Col className="col-3 text-end">
+          <br></br>
+          <h5>Answers Correct: {score}/6</h5>
           <h5>Total time taken: {totalTime}s</h5>
+          <h5>Your Score: ___ Points</h5>
+          <br></br>
           <h5>Next SpeedTriv</h5>
         </Col>
       </Row>
+    </Container>
     </>
   );
 }

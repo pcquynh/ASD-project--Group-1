@@ -3,6 +3,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useState, useEffect } from "react";
 import Question from "../components/Question";
 import { Container, Row, Col } from "react-bootstrap";
+// import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
 import Results from "../components/Results";
 
 function Game() {
@@ -18,11 +20,13 @@ function Game() {
   const [buttonColorA, setButtonColorA] = useState("col-7 btn btn-dark btn-lg active");
   const [buttonColorB, setButtonColorB] = useState("col-7 btn btn-dark btn-lg active");
   const [buttonColorC, setButtonColorC] = useState("col-7 btn btn-dark btn-lg active");
+  // const [open, setOpen] = useState(false);
+  // const closeModal = () => setOpen(false);
 
   //button styles - default, correct, incorrect
   const default_button = "col-7 btn btn-dark btn-lg active";
-  const green_button = "col-7 btn btn-success btn-lg active";
-  const red_button = "col-7 btn btn-danger btn-lg active";
+  const green_button = "col-7 btn btn-success btn-lg disabled";
+  const red_button = "col-7 btn btn-danger btn-lg disabled";
 
   useEffect(() => {
     const fetchData = async () => {
@@ -127,7 +131,7 @@ function Game() {
   let currentDateQuestions = [];
   if (loading === false && questions.length > 0) {
     currentDateQuestions = questions
-      .filter((q) => q.usedDate === currentDate)
+      // .filter((q) => q.usedDate === currentDate)
       .slice(0, 6);
     if (currentDateQuestions.length === 0) {
       currentDateQuestions = questions
