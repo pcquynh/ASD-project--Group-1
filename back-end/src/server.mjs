@@ -36,14 +36,13 @@ app.post("/api/init/:apiKey", async (req, res) => {
 });
 
 //Retrieve question data.
-//TODO: Pass a parameter in the request to specify which question to return and return that specific question.
-app.get("/api/question", async (req, res) => {
+app.get("/api/question/:date", async (req, res) => {
   try {
     await client.connect();
     const db = client.db("triviaDatabase");
     const questionInfo = await db
       .collection("trivia")
-      .find({})
+      .find({useDate: req.params.date})
       .project({ correctAnswer: 0 })
       .toArray();
     res.status(200).json(questionInfo);
@@ -54,7 +53,6 @@ app.get("/api/question", async (req, res) => {
 });
 
 //Check answer and send back correct/incorrect.
-//Working in postman, test in program!
 app.post("/api/checkanswer", async (req, res) => {
   const question = req.body.question;
 
@@ -79,6 +77,7 @@ app.post("/api/add", async (req, res) => {
   const choiceB = req.body.choiceB;
   const choiceC = req.body.choiceC;
   const correctAnswer = req.body.correctAnswer;
+  const useDate = req.body.useDate;
 
   try {
     await client.connect();
@@ -89,30 +88,11 @@ app.post("/api/add", async (req, res) => {
       choiceB: choiceB,
       choiceC: choiceC,
       correctAnswer: correctAnswer,
+      useDate: useDate
     });
     const questionInfo = await db.collection("trivia").find({}).toArray();
     res.status(200).json(questionInfo);
     client.close();
-  } catch (error) {
-    res.sendStatus(500);
-  }
-});
-
-// Test in postman, have cors error in application
-app.put("/api/update/:id", async (req, res) => {
-  const { usedDate } = req.body;
-  console.log(usedDate);
-  try {
-    await client.connect();
-    const db = client.db("triviaDatabase");
-    const updatedQuestion = await db
-      .collection("trivia")
-      .update(
-        { _id: ObjectId(req.params.id) },
-        { $set: { usedDate: usedDate } }
-      );
-    res.status(200).json(updatedQuestion);
-    // client.close();
   } catch (error) {
     res.sendStatus(500);
   }
