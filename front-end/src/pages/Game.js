@@ -6,7 +6,8 @@ import { Container, Row, Col } from "react-bootstrap";
 import Results from "../components/Results";
 
 function Game() {
-  const [startTime] = useState(Date.now());
+  const [timeTaken, setTimeTaken] = useState([]);
+  const [isCorrect, setIsCorrect] = useState([]);
   const [questions, setQuestions] = useState([]);
   const [score, setScore] = useState(0);
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -46,9 +47,13 @@ function Game() {
     if (timerActive){
       questionTimer = setInterval(() => setSecondsOnQuestion(secondsOnQuestion - 1), 1000);
     }else if (!timerActive && secondsOnQuestion !== 0){
+      let timeList = timeTaken;
+      setTimeTaken([...timeList, Math.abs(secondsOnQuestion-15) ]);
       clearInterval(questionTimer);
     }
     if (timerActive && secondsOnQuestion === 0){
+      let timeList = timeTaken;
+      setTimeTaken([...timeList, Math.abs(secondsOnQuestion-15) ]);
       clearInterval(questionTimer);
       checkAnswer("Timeout");
     }
@@ -86,6 +91,8 @@ function Game() {
       .then((result) => {
         if (result === answer) {
           setScore(score + 1);
+          let isCorrectList = isCorrect;
+          setIsCorrect([...isCorrect, true ]);
           if (answer === "A") {
             setButtonColorA(green_button);
             setButtonColorB(red_button);
@@ -102,6 +109,8 @@ function Game() {
             setButtonColorC(green_button);
           } 
         } else {
+          let isCorrectList = isCorrect;
+          setIsCorrect([...isCorrect, false ]);
           if (answer === "A") {
             setButtonColorA(red_button);
             if (result === "B"){
@@ -144,13 +153,14 @@ function Game() {
     }, 1500);
   }
 
+  console.log(isCorrect);
   if (questions.length > 0) {
     return (
       <Container className="d-flex flex-column min-vh-100 justify-content-center">
         {/* todo: update total time and waiting time for next round */}
         {showResults ? 
         (
-          <Results score={score} time={(Date.now() - startTime)/1000} />
+          <Results score={score} answers={isCorrect} time={timeTaken} />
         ) : (
           <>
             <Row className="text-center" onChange={showNextQuestion}>
