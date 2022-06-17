@@ -37,7 +37,12 @@ function Results({ score, time, answers }) {
           <h1>Game over!</h1>
           <br></br>
           <table>
-            <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th>
+            <thead>
+              <tr>
+              <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th>
+            </tr>
+            </thead>
+            <tbody>
             <tr>
             {answers.map( (rightOrWrong) => {
                         return(<td>
@@ -50,6 +55,7 @@ function Results({ score, time, answers }) {
             return(<td>{timeTaken}s</td>)
           })}
             </tr>
+            </tbody>
           </table>  
           <h5>Your Score: ___ Points</h5>
           <br></br>
