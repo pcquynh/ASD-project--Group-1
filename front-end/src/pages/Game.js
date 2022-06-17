@@ -3,8 +3,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useState, useEffect } from "react";
 import Question from "../components/Question";
 import { Container, Row, Col } from "react-bootstrap";
-// import Popup from 'reactjs-popup';
-// import 'reactjs-popup/dist/index.css';
 import Results from "../components/Results";
 
 function Game() {
@@ -14,14 +12,12 @@ function Game() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [secondsOnQuestion, setSecondsOnQuestion] = useState(15);
   const [loading, setLoading] = useState(false);
-  let currentDate = new Date().toISOString().slice(0, 10);
+  let currentDate = new Date().toLocaleDateString("sv").slice(0, 10);
   const [showResults, setShowResults] = useState(false);
   const [timerActive, setTimerActive] = useState(true);
   const [buttonColorA, setButtonColorA] = useState("col-7 btn btn-dark btn-lg active");
   const [buttonColorB, setButtonColorB] = useState("col-7 btn btn-dark btn-lg active");
   const [buttonColorC, setButtonColorC] = useState("col-7 btn btn-dark btn-lg active");
-  // const [open, setOpen] = useState(false);
-  // const closeModal = () => setOpen(false);
 
   //button styles - default, correct, incorrect
   const default_button = "col-7 btn btn-dark btn-lg active";
@@ -31,7 +27,7 @@ function Game() {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      const result = await fetch("/api/question");
+      const result = await fetch(`http://localhost:8000/api/question/${currentDate}`);
       const body = await result.json();
       setQuestions(body);
       setLoading(false);
@@ -53,6 +49,7 @@ function Game() {
       clearInterval(questionTimer);
     }
     if (timerActive && secondsOnQuestion === 0){
+      clearInterval(questionTimer);
       checkAnswer("Timeout");
     }
     return () => clearInterval(questionTimer);
@@ -103,7 +100,6 @@ function Game() {
       })
       .catch((error) => console.log("error", error));
 
-    
     setTimeout(() => {
       setButtonColorA(default_button);
       setButtonColorB(default_button);
@@ -112,46 +108,13 @@ function Game() {
     }, 1500);
   }
 
-  const updateCurrentDateQuestion = async (id) => {
-    const requestOptions = {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ usedDate: currentDate }),
-    };
-    const response = await fetch(
-      `http://localhost:8000/api/update/${id}`,
-      requestOptions
-    );
-    const data = await response.json();
-    console.log(data);
-  };
-
-  let currentDateQuestions = [];
-  if (loading === false && questions.length > 0) {
-    currentDateQuestions = questions
-      // .filter((q) => q.usedDate === currentDate)
-      .slice(0, 6);
-    if (currentDateQuestions.length === 0) {
-      currentDateQuestions = questions
-        .filter((q) => q.usedDate === null)
-        .slice(0, 6);
-      console.log(currentDateQuestions);
-      currentDateQuestions.forEach((q) => {
-        console.log(q._id);
-        updateCurrentDateQuestion(q._id);
-      });
-    }
-  }
-
-  if (currentDateQuestions.length > 0) {
+  if (questions.length > 0) {
     return (
       <Container>
         {/* todo: update total time and waiting time for next round */}
         {showResults ? 
         (
-          <Results score={score} time={startTime} />
+          <Results score={score} time={(Date.now() - startTime)/1000} />
         ) : (
           <>
             <Row className="text-center" onChange={showNextQuestion}>
@@ -164,13 +127,13 @@ function Game() {
             <Row className="text-center font-weight-bold">
               <Col>
                 <h1>
-                  Question {currentQuestion + 1}/{currentDateQuestions.length}
+                  Question {currentQuestion + 1}/{questions.length}
                 </h1>
                 <br></br>
               </Col>
             </Row>
             <Question
-              question={currentDateQuestions[currentQuestion]}
+              question={questions[currentQuestion]}
               checkAnswer={checkAnswer}
               score={score}
               setTimerActive={setTimerActive}
