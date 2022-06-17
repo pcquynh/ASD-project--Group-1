@@ -5,12 +5,15 @@ import { Container, Row, Col } from "react-bootstrap";
 
 
 function Results({ score, time, answers }) {
-  // TODO: Incorporate time into scoring system
-  // const scoring = () => {
-  //   let points = 0;
-  //   points += score * 100;
-  //   points += 
-  // }
+  let points = 0;
+  let timeBonus = 0;
+  for(let i = 0; i<answers.length;i++){
+      if (answers[i] == true){
+          timeBonus = Math.abs(time[i] - 15) * 10;
+        }
+        points += 100 + timeBonus;
+      }
+
 
   const [timeDifferenceHour, setTimeDifferenceHour] = useState("");
   const [timeDifferenceMinute, setTimeDifferenceMinute] = useState("");
@@ -57,7 +60,7 @@ function Results({ score, time, answers }) {
             </tr>
             </tbody>
           </table>  
-          <h5>Your Score: ___ Points</h5>
+          <h5>Your Score: {points} Points</h5>
           <br></br>
           <h5>Next SpeedTriv</h5>
           <h6>Hours: {timeDifferenceHour}</h6>
