@@ -86,16 +86,52 @@ function Game() {
       .then((result) => {
         if (result === answer) {
           setScore(score + 1);
-          if (answer === "A") setButtonColorA(green_button);
-          if (answer === "B") setButtonColorB(green_button);
-          if (answer === "C") setButtonColorC(green_button);
+          if (answer === "A") {
+            setButtonColorA(green_button);
+            setButtonColorB(red_button);
+            setButtonColorC(red_button);
+          } 
+          if (answer === "B"){
+            setButtonColorA(red_button);
+            setButtonColorB(green_button);
+            setButtonColorC(red_button);
+          } 
+          if (answer === "C"){
+            setButtonColorA(red_button);
+            setButtonColorB(red_button);
+            setButtonColorC(green_button);
+          } 
         } else {
-          if (answer === "A") setButtonColorA(red_button);
-          if (answer === "B") setButtonColorB(red_button);
-          if (answer === "C") setButtonColorC(red_button);
-          if (result === "A") setButtonColorA(green_button);
-          if (result === "B") setButtonColorB(green_button);
-          if (result === "C") setButtonColorC(green_button);
+          if (answer === "A") {
+            setButtonColorA(red_button);
+            if (result === "B"){
+              setButtonColorB(green_button);
+              setButtonColorC(red_button);
+            } else {
+              setButtonColorC(green_button);
+              setButtonColorB(red_button);
+            }
+          } 
+          if (answer === "B") {
+            setButtonColorB(red_button);
+            if (result === "A"){
+              setButtonColorA(green_button);
+              setButtonColorC(red_button);
+            } else {
+              setButtonColorC(green_button);
+              setButtonColorA(red_button);
+            }
+          }
+            if (answer === "C") {
+              setButtonColorC(red_button);
+              if (result === "B"){
+                setButtonColorB(green_button);
+                setButtonColorA(red_button);
+              } else {
+                setButtonColorA(green_button);
+                setButtonColorB(red_button);
+              }
+            }
         }
       })
       .catch((error) => console.log("error", error));
@@ -110,7 +146,7 @@ function Game() {
 
   if (questions.length > 0) {
     return (
-      <Container>
+      <Container className="d-flex flex-column min-vh-100 justify-content-center">
         {/* todo: update total time and waiting time for next round */}
         {showResults ? 
         (

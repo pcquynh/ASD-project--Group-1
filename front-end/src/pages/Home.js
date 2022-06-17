@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 function Home() {
   const navigate = useNavigate();
   return (
-    <Container>
+    <Container className="d-flex flex-column min-vh-100 justify-content-center">
       <Row className="text-center">
         <Col>
           <h1>Welcome to Speedtriv!</h1>
