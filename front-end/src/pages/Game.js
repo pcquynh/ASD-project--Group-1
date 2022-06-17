@@ -3,8 +3,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useState, useEffect } from "react";
 import Question from "../components/Question";
 import { Container, Row, Col } from "react-bootstrap";
-// import Popup from 'reactjs-popup';
-// import 'reactjs-popup/dist/index.css';
 import Results from "../components/Results";
 
 function Game() {
@@ -20,8 +18,6 @@ function Game() {
   const [buttonColorA, setButtonColorA] = useState("col-7 btn btn-dark btn-lg active");
   const [buttonColorB, setButtonColorB] = useState("col-7 btn btn-dark btn-lg active");
   const [buttonColorC, setButtonColorC] = useState("col-7 btn btn-dark btn-lg active");
-  // const [open, setOpen] = useState(false);
-  // const closeModal = () => setOpen(false);
 
   //button styles - default, correct, incorrect
   const default_button = "col-7 btn btn-dark btn-lg active";
@@ -89,16 +85,52 @@ function Game() {
       .then((result) => {
         if (result === answer) {
           setScore(score + 1);
-          if (answer === "A") setButtonColorA(green_button);
-          if (answer === "B") setButtonColorB(green_button);
-          if (answer === "C") setButtonColorC(green_button);
+          if (answer === "A") {
+            setButtonColorA(green_button);
+            setButtonColorB(red_button);
+            setButtonColorC(red_button);
+          } 
+          if (answer === "B"){
+            setButtonColorA(red_button);
+            setButtonColorB(green_button);
+            setButtonColorC(red_button);
+          } 
+          if (answer === "C"){
+            setButtonColorA(red_button);
+            setButtonColorB(red_button);
+            setButtonColorC(green_button);
+          } 
         } else {
-          if (answer === "A") setButtonColorA(red_button);
-          if (answer === "B") setButtonColorB(red_button);
-          if (answer === "C") setButtonColorC(red_button);
-          if (result === "A") setButtonColorA(green_button);
-          if (result === "B") setButtonColorB(green_button);
-          if (result === "C") setButtonColorC(green_button);
+          if (answer === "A") {
+            setButtonColorA(red_button);
+            if (result === "B"){
+              setButtonColorB(green_button);
+              setButtonColorC(red_button);
+            } else {
+              setButtonColorC(green_button);
+              setButtonColorB(red_button);
+            }
+          } 
+          if (answer === "B") {
+            setButtonColorB(red_button);
+            if (result === "A"){
+              setButtonColorA(green_button);
+              setButtonColorC(red_button);
+            } else {
+              setButtonColorC(green_button);
+              setButtonColorA(red_button);
+            }
+          }
+            if (answer === "C") {
+              setButtonColorC(red_button);
+              if (result === "B"){
+                setButtonColorB(green_button);
+                setButtonColorA(red_button);
+              } else {
+                setButtonColorA(green_button);
+                setButtonColorB(red_button);
+              }
+            }
         }
       })
       .catch((error) => console.log("error", error));
@@ -147,7 +179,7 @@ function Game() {
 
   if (currentDateQuestions.length > 0) {
     return (
-      <Container>
+      <Container className="d-flex flex-column min-vh-100 justify-content-center">
         {/* todo: update total time and waiting time for next round */}
         {showResults ? 
         (
