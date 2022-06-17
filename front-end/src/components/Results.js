@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Row, Col } from "react-bootstrap";
 
 
-function Results({ score, time }) {
+function Results({ score, time, answers }) {
   // TODO: Incorporate time into scoring system
   // const scoring = () => {
   //   let points = 0;
@@ -28,7 +28,7 @@ function Results({ score, time }) {
       timeDifferenceMS = timeDifferenceMS - (timeDifferenceMinute * 60);
       setTimeDifferenceSecond((Math.floor(timeDifferenceMS)));
   }, 1000)
-  
+
   return (
     <>
     <Container>
@@ -36,8 +36,21 @@ function Results({ score, time }) {
         <Col className="col-7 border border-dark text-center">
           <h1>Game over!</h1>
           <br></br>
-          <h5>Answers Correct: {score}/6</h5>
-          <h5>Total time taken: {time}s</h5>
+          <table>
+            <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th>
+            <tr>
+            {answers.map( (rightOrWrong) => {
+                        return(<td>
+                        {rightOrWrong ? "Correct" : "Incorrect"}
+                        </td>)
+                      })}
+            </tr>
+            <tr>
+              {time.map( (timeTaken) => {
+            return(<td>{timeTaken}s</td>)
+          })}
+            </tr>
+          </table>  
           <h5>Your Score: ___ Points</h5>
           <br></br>
           <h5>Next SpeedTriv</h5>
