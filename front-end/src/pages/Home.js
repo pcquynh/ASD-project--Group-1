@@ -31,15 +31,11 @@ function Home() {
       </Row>
       <br></br>
       <Row className="justify-content-center">
-        <a
-          href="#"
+        <button
           className="col-7 btn btn-dark btn-lg active"
-          role="button"
-          aria-pressed="true"
-          onClick={() => navigate("/game")}
-        >
+          onClick={() => navigate("/game")}>
           Start
-        </a>
+        </button>
       </Row>
     </Container>
   );
