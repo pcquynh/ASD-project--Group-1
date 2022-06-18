@@ -149,7 +149,6 @@ function Game() {
   if (questions.length > 0) {
     return (
       <Container className="d-flex flex-column min-vh-100 justify-content-center">
-        {/* todo: update total time and waiting time for next round */}
         {showResults ? 
         (
           <Results score={score} answers={isCorrect} time={timeTaken} />
