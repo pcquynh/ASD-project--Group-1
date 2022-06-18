@@ -12,7 +12,6 @@ function Game() {
   const [score, setScore] = useState(0);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [secondsOnQuestion, setSecondsOnQuestion] = useState(15);
-  const [loading, setLoading] = useState(false);
   let currentDate = new Date().toLocaleDateString("sv").slice(0, 10);
   const [showResults, setShowResults] = useState(false);
   const [timerActive, setTimerActive] = useState(true);
@@ -27,11 +26,9 @@ function Game() {
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
       const result = await fetch(`http://localhost:8000/api/question/${currentDate}`);
       const body = await result.json();
       setQuestions(body);
-      setLoading(false);
     };
     fetchData();
   }, []);
@@ -47,13 +44,11 @@ function Game() {
     if (timerActive){
       questionTimer = setInterval(() => setSecondsOnQuestion(secondsOnQuestion - 1), 1000);
     }else if (!timerActive && secondsOnQuestion !== 0){
-      let timeList = timeTaken;
-      setTimeTaken([...timeList, Math.abs(secondsOnQuestion-15) ]);
+      setTimeTaken([...timeTaken, Math.abs(secondsOnQuestion-15) ]);
       clearInterval(questionTimer);
     }
     if (timerActive && secondsOnQuestion === 0){
-      let timeList = timeTaken;
-      setTimeTaken([...timeList, Math.abs(secondsOnQuestion-15) ]);
+      setTimeTaken([...timeTaken, Math.abs(secondsOnQuestion-15) ]);
       clearInterval(questionTimer);
       checkAnswer("Timeout");
     }
@@ -91,7 +86,6 @@ function Game() {
       .then((result) => {
         if (result === answer) {
           setScore(score + 1);
-          let isCorrectList = isCorrect;
           setIsCorrect([...isCorrect, true ]);
           if (answer === "A") {
             setButtonColorA(green_button);
@@ -109,7 +103,6 @@ function Game() {
             setButtonColorC(green_button);
           } 
         } else {
-          let isCorrectList = isCorrect;
           setIsCorrect([...isCorrect, false ]);
           if (answer === "A") {
             setButtonColorA(red_button);
@@ -153,7 +146,6 @@ function Game() {
     }, 1500);
   }
 
-  console.log(isCorrect);
   if (questions.length > 0) {
     return (
       <Container className="d-flex flex-column min-vh-100 justify-content-center">
@@ -165,7 +157,7 @@ function Game() {
           <>
             <Row className="text-center" onChange={showNextQuestion}>
               <Col>
-                <p class="fw-bold display-2">{`0:${secondsOnQuestion
+                <p className="fw-bold display-2">{`0:${secondsOnQuestion
                   .toString()
                   .padStart(2, "0")}`}</p>
               </Col>
