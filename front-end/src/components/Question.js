@@ -13,8 +13,11 @@ function Question({ question, checkAnswer = (f) => f, setTimerActive = (f) => f,
       <br></br>
       <br></br>
       <Row className="justify-content-center">
-        <button
+        <a
+          href="#"
           className={buttonColorA}
+          role="button"
+          aria-pressed="true"
           onClick={
             () => {
               setTimerActive(false);
@@ -23,12 +26,15 @@ function Question({ question, checkAnswer = (f) => f, setTimerActive = (f) => f,
             }
         >
           A. {question.choiceA}
-        </button>
+        </a>
       </Row>
       <br></br>
       <Row className="justify-content-center">
-        <button
+        <a
+          href="#"
           className={buttonColorB}
+          role="button"
+          aria-pressed="true"
           onClick={
             () => {
               setTimerActive(false);
@@ -37,19 +43,22 @@ function Question({ question, checkAnswer = (f) => f, setTimerActive = (f) => f,
           }
         >
           B. {question.choiceB}
-        </button>
+        </a>
       </Row>
       <br></br>
       <Row className="justify-content-center">
-        <button
+        <a
+          href="#"
           className={buttonColorC}
+          role="button"
+          aria-pressed="true"
           onClick={() => {
             setTimerActive(false);
             checkAnswer("C");
           }}
         >
           C. {question.choiceC}
-        </button>
+        </a>
       </Row>
       <br></br>
     </>

@@ -2,19 +2,18 @@ import React from "react";
 import { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Row, Col } from "react-bootstrap";
-import { GiCheckMark } from "react-icons/gi"
-import { BsXLg } from "react-icons/bs"
 
 
 function Results({ score, time, answers }) {
   let points = 0;
   let timeBonus = 0;
   for(let i = 0; i<answers.length;i++){
-      if (answers[i] === true){
+      if (answers[i] == true){
           timeBonus = Math.abs(time[i] - 15) * 10;
-          points += 100 + timeBonus;
+        }
+        points += 100 + timeBonus;
       }
-  }
+
 
   const [timeDifferenceHour, setTimeDifferenceHour] = useState("");
   const [timeDifferenceMinute, setTimeDifferenceMinute] = useState("");
@@ -24,14 +23,13 @@ function Results({ score, time, answers }) {
   const midnight = nextDay.getTime()/1000
   let currentTime = (new Date().getTime())/1000;
 
-  const countdown = setInterval( () => {
+  setInterval( () => {
       let timeDifferenceMS = midnight - currentTime;
       setTimeDifferenceHour(Math.floor(timeDifferenceMS/3600)) ;
       timeDifferenceMS = timeDifferenceMS - (timeDifferenceHour * 3600);
       setTimeDifferenceMinute(Math.floor(timeDifferenceMS/60));
       timeDifferenceMS = timeDifferenceMS - (timeDifferenceMinute * 60);
       setTimeDifferenceSecond((Math.floor(timeDifferenceMS)));
-      clearInterval(countdown);
   }, 1000)
 
   return (
@@ -49,15 +47,15 @@ function Results({ score, time, answers }) {
             </thead>
             <tbody>
             <tr>
-            {answers.map( (rightOrWrong, i) => {
-                        return(<td key={i}>
-                        {rightOrWrong ? <GiCheckMark color="green" /> : <BsXLg color="red" />}
+            {answers.map( (rightOrWrong) => {
+                        return(<td>
+                        {rightOrWrong ? "Correct" : "Incorrect"}
                         </td>)
                       })}
             </tr>
             <tr>
-              {time.map( (timeTaken, i) => {
-            return(<td key={i}>{timeTaken}s</td>)
+              {time.map( (timeTaken) => {
+            return(<td>{timeTaken}s</td>)
           })}
             </tr>
             </tbody>
