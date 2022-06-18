@@ -14,7 +14,7 @@ function Home() {
         </Col>
       </Row>
       <Row className="justify-content-center">
-        <Col className="col-7 border border-dark">
+        <Col className="col-md-7 border border-dark">
           <h5>
             <p>
               Speedtriv is a daily trivia game, with an emphasis on speed and
