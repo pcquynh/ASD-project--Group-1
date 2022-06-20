@@ -26,7 +26,7 @@ function Game() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await fetch(`http://localhost:8000/api/question/${currentDate}`);
+      const result = await fetch(`/api/question/${currentDate}`);
       const body = await result.json();
       setQuestions(body);
     };
@@ -81,7 +81,7 @@ function Game() {
       redirect: "follow",
     };
 
-    await fetch("http://localhost:8000/api/checkanswer", requestOptions)
+    await fetch("/api/checkanswer", requestOptions)
       .then((response) => response.text())
       .then((result) => {
         if (result === answer) {
