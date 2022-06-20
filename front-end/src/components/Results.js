@@ -31,9 +31,10 @@ function Results({ score, time, answers }) {
     <>
       <Container>
         <Row className="justify-content-center">
-          <Col className="col-7 border border-dark text-center">
+          <Col className="col-md-7 border border-dark text-center">
             <h1>Game over!</h1>
             <br></br>
+            <Row className="text-center">
             <table>
               <thead>
                 <tr>
@@ -58,6 +59,8 @@ function Results({ score, time, answers }) {
                 </tr>
               </tbody>
             </table>
+            </Row>
+            <br></br>
             <h5>Your Score: {points} Points</h5>
             <h5>Total games played: {totalGames} </h5>
             <h5>Highest Score: {highestScore}</h5>

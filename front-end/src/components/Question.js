@@ -6,7 +6,7 @@ function Question({ question, checkAnswer = (f) => f, setTimerActive = (f) => f,
   return (
     <>
       <Row className="justify-content-center">
-        <Col className="col-7 border border-dark text-center">
+        <Col className="col-md-7 border border-dark text-center">
           <h5>{question.question}</h5>
         </Col>
       </Row>
