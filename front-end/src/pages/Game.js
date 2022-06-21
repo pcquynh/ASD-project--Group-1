@@ -4,8 +4,10 @@ import { useState, useEffect } from "react";
 import Question from "../components/Question";
 import { Container, Row, Col } from "react-bootstrap";
 import Results from "../components/Results";
+import { useNavigate } from "react-router-dom";
 
 function Game() {
+  const navigate = useNavigate();
   const [timeTaken, setTimeTaken] = useState([]);
   const [isCorrect, setIsCorrect] = useState([]);
   const [questions, setQuestions] = useState([]);
@@ -15,9 +17,31 @@ function Game() {
   let currentDate = new Date().toLocaleDateString("sv").slice(0, 10);
   const [showResults, setShowResults] = useState(false);
   const [timerActive, setTimerActive] = useState(true);
-  const [buttonColorA, setButtonColorA] = useState("col-7 btn btn-dark btn-lg active");
-  const [buttonColorB, setButtonColorB] = useState("col-7 btn btn-dark btn-lg active");
-  const [buttonColorC, setButtonColorC] = useState("col-7 btn btn-dark btn-lg active");
+  const [buttonColorA, setButtonColorA] = useState(
+    "col-7 btn btn-dark btn-lg active"
+  );
+  const [buttonColorB, setButtonColorB] = useState(
+    "col-7 btn btn-dark btn-lg active"
+  );
+  const [buttonColorC, setButtonColorC] = useState(
+    "col-7 btn btn-dark btn-lg active"
+  );
+  const [playable, setPlayable] = useState(false);
+
+  // local storage
+  const checkPlayable = () => {
+    let gameScores = JSON.parse(localStorage.getItem("scores") || "[]");
+    if (gameScores.length === 0) {
+      setPlayable(true);
+    } else {
+      let dateArray = gameScores.map((game) => game.currentDate);
+      let totalDate = dateArray.length;
+      let lastPlayedDate = dateArray[totalDate - 1];
+      if (lastPlayedDate < currentDate) {
+        setPlayable(true);
+      }
+    }
+  };
 
   //button styles - default, correct, incorrect
   const default_button = "col-7 btn btn-dark btn-lg active";
@@ -31,6 +55,7 @@ function Game() {
       setQuestions(body);
     };
     fetchData();
+    checkPlayable();
   }, []);
 
   const reset = () => {
@@ -41,14 +66,17 @@ function Game() {
 
   useEffect(() => {
     let questionTimer = null;
-    if (timerActive){
-      questionTimer = setInterval(() => setSecondsOnQuestion(secondsOnQuestion - 1), 1000);
-    }else if (!timerActive && secondsOnQuestion !== 0){
-      setTimeTaken([...timeTaken, Math.abs(secondsOnQuestion-15) ]);
+    if (timerActive) {
+      questionTimer = setInterval(
+        () => setSecondsOnQuestion(secondsOnQuestion - 1),
+        1000
+      );
+    } else if (!timerActive && secondsOnQuestion !== 0) {
+      setTimeTaken([...timeTaken, Math.abs(secondsOnQuestion - 15)]);
       clearInterval(questionTimer);
     }
-    if (timerActive && secondsOnQuestion === 0){
-      setTimeTaken([...timeTaken, Math.abs(secondsOnQuestion-15) ]);
+    if (timerActive && secondsOnQuestion === 0) {
+      setTimeTaken([...timeTaken, Math.abs(secondsOnQuestion - 15)]);
       clearInterval(questionTimer);
       checkAnswer("Timeout");
     }
@@ -86,37 +114,37 @@ function Game() {
       .then((result) => {
         if (result === answer) {
           setScore(score + 1);
-          setIsCorrect([...isCorrect, true ]);
+          setIsCorrect([...isCorrect, true]);
           if (answer === "A") {
             setButtonColorA(green_button);
             setButtonColorB(red_button);
             setButtonColorC(red_button);
-          } 
-          if (answer === "B"){
+          }
+          if (answer === "B") {
             setButtonColorA(red_button);
             setButtonColorB(green_button);
             setButtonColorC(red_button);
-          } 
-          if (answer === "C"){
+          }
+          if (answer === "C") {
             setButtonColorA(red_button);
             setButtonColorB(red_button);
             setButtonColorC(green_button);
-          } 
+          }
         } else {
-          setIsCorrect([...isCorrect, false ]);
+          setIsCorrect([...isCorrect, false]);
           if (answer === "A") {
             setButtonColorA(red_button);
-            if (result === "B"){
+            if (result === "B") {
               setButtonColorB(green_button);
               setButtonColorC(red_button);
             } else {
               setButtonColorC(green_button);
               setButtonColorB(red_button);
             }
-          } 
+          }
           if (answer === "B") {
             setButtonColorB(red_button);
-            if (result === "A"){
+            if (result === "A") {
               setButtonColorA(green_button);
               setButtonColorC(red_button);
             } else {
@@ -124,16 +152,16 @@ function Game() {
               setButtonColorA(red_button);
             }
           }
-            if (answer === "C") {
-              setButtonColorC(red_button);
-              if (result === "B"){
-                setButtonColorB(green_button);
-                setButtonColorA(red_button);
-              } else {
-                setButtonColorA(green_button);
-                setButtonColorB(red_button);
-              }
+          if (answer === "C") {
+            setButtonColorC(red_button);
+            if (result === "B") {
+              setButtonColorB(green_button);
+              setButtonColorA(red_button);
+            } else {
+              setButtonColorA(green_button);
+              setButtonColorB(red_button);
             }
+          }
         }
       })
       .catch((error) => console.log("error", error));
@@ -145,12 +173,13 @@ function Game() {
       showNextQuestion();
     }, 1500);
   }
-
-  if (questions.length > 0) {
+  if (playable === false) {
+    navigate("/statistics");
+  }
+  if (questions.length > 0 && playable === true) {
     return (
       <Container className="d-flex flex-column min-vh-100 justify-content-center">
-        {showResults ? 
-        (
+        {showResults ? (
           <Results score={score} answers={isCorrect} time={timeTaken} />
         ) : (
           <>
@@ -177,7 +206,7 @@ function Game() {
               buttonColorA={buttonColorA}
               buttonColorB={buttonColorB}
               buttonColorC={buttonColorC}
-              />
+            />
           </>
         )}
       </Container>
