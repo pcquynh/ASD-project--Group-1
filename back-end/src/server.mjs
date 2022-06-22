@@ -103,3 +103,17 @@ app.get("*", (req, res) => {
 });
 
 app.listen(8000, () => console.log("Listening on port 8000."));
+
+// const httpServer = http.createServer(app);
+// const httpsServer = https.createServer({
+//   key: fs.readFileSync('/etc/letsencrypt/live/speedtriv.ca/privkey.pem'),
+//   cert: fs.readFileSync('/etc/letsencrypt/live/speedtriv.ca/fullchain.pem'),
+// }, app);
+
+// httpServer.listen(80, () => {
+//     console.log('HTTP Server running on port 80');
+// });
+
+// httpsServer.listen(443, () => {
+//     console.log('HTTPS Server running on port 443');
+// });
