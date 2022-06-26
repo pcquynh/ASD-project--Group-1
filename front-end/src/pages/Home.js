@@ -29,6 +29,7 @@ function Home() {
             <p>
               Your total score and time taken will be displayed after each game.
             </p>
+            <p>Bonus points will be awarded based on speed.</p>
             <p>Good luck and have fun!</p>
           </h5>
         </Col>
