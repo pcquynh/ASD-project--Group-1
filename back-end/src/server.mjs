@@ -1,10 +1,14 @@
 import express from "express";
-import { MongoClient, ObjectId } from "mongodb";
+import { MongoClient } from "mongodb";
 import path from "path";
 import { fileURLToPath } from "url";
 import cors from "cors";
+import http from "http";
+import https from "https";
+import fs from "fs";
 
 const app = express();
+const httpApp = express();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -12,14 +16,18 @@ app.use(express.static(path.join(__dirname, "/build")));
 app.use(cors());
 app.use(express.json());
 
-const client = new MongoClient("mongodb://localhost:27017");
+httpApp.set('port', process.env.PORT || 80);
+httpApp.get("*", function (req, res, next) {
+    res.redirect("https://" + req.headers.host + req.path);
+});
+
+const client = new MongoClient(process.env.MONGO_CONNECTION);
 
 //Rebuild database with new JSON data.
-//Working. Data entered must be correct, no error checking currently.
 app.post("/api/init/:apiKey", async (req, res) => {
   const { apiKey } = req.params;
   const triviaData = req.body;
-  if (apiKey === "5f767fa2-1f5a-4e45-ba11-4d7001a6744e") {
+  if (apiKey === process.env.API_KEY) {
     console.log("Initializing trivia database with JSON data.");
     try {
       await client.connect();
@@ -70,7 +78,6 @@ app.post("/api/checkanswer", async (req, res) => {
 });
 
 //Add one single question to the database.
-//Working. No error checking.
 app.post("/api/add", async (req, res) => {
   const question = req.body.question;
   const choiceA = req.body.choiceA;
@@ -98,13 +105,29 @@ app.post("/api/add", async (req, res) => {
   }
 });
 
+//Add multiple questions.
+app.post("/api/addquestions", async (req, res) => {
+  const triviaData = req.body;
+    try {
+      await client.connect();
+      const db = client.db("triviaDatabase");
+      await db.collection("trivia").insertMany(triviaData);
+      const triviaInfo = await db.collection("trivia").find({}).toArray();
+      res.status(200).json(triviaInfo);
+      client.close();
+    } catch (error) {
+      res.sendStatus(500);
+    }
+  }
+);
+
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname + "/build/index.html"));
 });
 
 app.listen(8000, () => console.log("Listening on port 8000."));
 
-// const httpServer = http.createServer(app);
+// const httpServer = http.createServer(httpApp);
 // const httpsServer = https.createServer({
 //   key: fs.readFileSync('/etc/letsencrypt/live/speedtriv.ca/privkey.pem'),
 //   cert: fs.readFileSync('/etc/letsencrypt/live/speedtriv.ca/fullchain.pem'),
