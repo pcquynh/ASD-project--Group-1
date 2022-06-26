@@ -6,10 +6,14 @@ import { useNavigate } from "react-router-dom";
 function Home() {
   const navigate = useNavigate();
   return (
+    <>
     <Container className="d-flex flex-column min-vh-100 justify-content-center">
+      <Row className="align-self-center">
+      <img src="speedtriv2.png"></img>
+      </Row>
       <Row className="text-center">
         <Col>
-          <h1>Welcome to Speedtriv!</h1>
+          <h1>Welcome!</h1>
           <br></br>
         </Col>
       </Row>
@@ -38,6 +42,7 @@ function Home() {
         </button>
       </Row>
     </Container>
+    </>
   );
 }
 

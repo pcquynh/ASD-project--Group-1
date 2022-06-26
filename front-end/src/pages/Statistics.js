@@ -20,7 +20,10 @@ export function Statistics() {
 
   return (
     <>
-      <Container>
+      <Container className="d-flex flex-column min-vh-100 justify-content-center">
+      <Row className="align-self-center">
+      <img src="speedtriv2.png"></img>
+      </Row>
         <Row className="justify-content-center">
           <Col className="col-md-7 border border-dark text-center">
             <h1>Game Statistics!</h1>

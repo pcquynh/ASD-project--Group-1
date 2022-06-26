@@ -209,6 +209,9 @@ function Game() {
             />
           </>
         )}
+        <Row className="align-self-center">
+      <img src="speedtriv_small.png"></img>
+      </Row>
       </Container>
     );
   }
