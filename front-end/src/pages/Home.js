@@ -2,9 +2,30 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Row, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import Statistics from "./Statistics";
 
 function Home() {
   const navigate = useNavigate();
+  let currentDate = new Date().toLocaleDateString("sv").slice(0, 10);
+
+  let [playable, setPlayable] = useState(false);
+
+  useEffect(() => {
+    let gameScores = JSON.parse(localStorage.getItem("scores") || "[]");
+    if (gameScores.length === 0) {
+      setPlayable(true);
+    } else {
+      let dateArray = gameScores.map((game) => game.currentDate);
+      let totalDate = dateArray.length;
+      let lastPlayedDate = dateArray[totalDate - 1];
+      if (lastPlayedDate < currentDate) {
+        setPlayable(true);
+      }
+    }
+  }, []);
+
+  if (playable){
   return (
     <>
     <Container className="d-flex flex-column min-vh-100 justify-content-center">
@@ -18,7 +39,7 @@ function Home() {
         </Col>
       </Row>
       <Row className="justify-content-center">
-        <Col className="col-md-7 border border-dark">
+        <Col id="rules" className="col-md-7 border border-dark border-2 p-3 bg-white">
           <h5>
             <p>
               Speedtriv is a daily trivia game, with an emphasis on speed and
@@ -44,7 +65,11 @@ function Home() {
       </Row>
     </Container>
     </>
-  );
+  );}else{
+    return(
+      <Statistics/>
+    )
+  }
 }
 
 export default Home;

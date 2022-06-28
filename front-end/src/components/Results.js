@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Row, Col } from "react-bootstrap";
 import { GiCheckMark } from "react-icons/gi"
 import { BsXLg } from "react-icons/bs"
+import "../App.css";
 
 function Results({ score, time, answers }) {
   let currentDate = new Date().toLocaleDateString("sv").slice(0, 10);
@@ -31,7 +32,7 @@ function Results({ score, time, answers }) {
     <>
       <Container>
         <Row className="justify-content-center">
-          <Col className="col-md-7 border border-dark text-center">
+          <Col className="col-md-7 border border-dark border-2 p-3 text-center bg-white">
             <h1>Game over!</h1>
             <br></br>
             <Row className="text-center">
@@ -54,7 +55,7 @@ function Results({ score, time, answers }) {
                 </tr>
                 <tr>
                   {time.map((timeTaken, i) => {
-                    return <td key={i}>{timeTaken}s</td>;
+                    return <td className="w-15" key={i}>{timeTaken}s</td>;
                   })}
                 </tr>
               </tbody>
