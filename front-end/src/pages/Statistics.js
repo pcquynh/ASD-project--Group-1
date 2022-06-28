@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Row, Col } from "react-bootstrap";
 import NextGameCountdown from "../components/NextGameCountdown";
 
-export function Statistics() {
+function Statistics() {
   let scoreArray = 0;
   let totalGames = 0;
   let highestScore = 0;
@@ -25,7 +25,7 @@ export function Statistics() {
       <img src="speedtriv2.png"></img>
       </Row>
         <Row className="justify-content-center">
-          <Col className="col-md-7 border border-dark text-center">
+          <Col className="col-md-7 border border-dark border-2 p-3 text-center bg-white">
             <h1>Game Statistics!</h1>
             <br></br>
             <h5>Total games played: {totalGames} </h5>
